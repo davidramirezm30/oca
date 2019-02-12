@@ -2,10 +2,9 @@
  * @brief It implements the command interpreter
  * 
  * @file command.h
- * @author Profesores PPROG
- * @version 1.0 
- * @date 19-12-2014 
- * @copyright GNU Public License
+ * @author David Ramirez
+ * @version 1.1 
+ * @date 12/02/2019 
  */
 
 #ifndef COMMAND_H
@@ -16,7 +15,9 @@ typedef enum enum_Command {
   UNKNOWN, 
   EXIT, 
   NEXT, 
-  BACK} T_Command;
+  BACK,
+  TAKE,
+  DROP} T_Command;
 
 T_Command get_user_input();
 

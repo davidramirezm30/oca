@@ -2,10 +2,9 @@
  * @brief It implements the command interpreter
  * 
  * @file command.c
- * @author Profesores PPROG
- * @version 1.0 
- * @date 19-12-2014 
- * @copyright GNU Public License
+ * @author David Ramirez
+ * @version 1.1 
+ * @date 12/02/2019 
  */
 
 #include <stdio.h>
@@ -13,10 +12,10 @@
 #include "command.h"
 
 #define CMD_LENGHT 30
-#define N_CMD 5
+#define N_CMD 7
 
-char *cmd_to_str[N_CMD] = {"No command", "Unknown", "Exit", "Next", "Back"};
-char *short_cmd_to_str[N_CMD] = {"","","e","n","b"};
+char *cmd_to_str[N_CMD] = {"No command", "Unknown", "Exit", "Next", "Back", "Take", "Drop"};
+char *short_cmd_to_str[N_CMD] = {"","","e","n","b","t","d"};
 
 
 T_Command get_user_input(){

@@ -4,7 +4,7 @@
  * @file graphic_engine.h
  * @author Profesores PPROG
  * @version 1.0 
- * @date 18-01-2017
+ * @date 18/01/2017
  * @copyright GNU Public License
  */
 

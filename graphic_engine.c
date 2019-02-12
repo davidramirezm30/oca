@@ -1,3 +1,12 @@
+/** 
+ * @brief It takes the information from a file to create 
+ * the game and defines the interface.
+ * 
+ * @file game_reader.c
+ * @author David Ramirez
+ * @version 1.1 
+ * @date 12/02/2019
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include "screen.h"
@@ -118,7 +127,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
   screen_area_puts(ge->help, str);
-  sprintf(str, "     next or n, back or b, exit or e");
+  sprintf(str, "     next or n, back or b, exit or e, take or t, drop or d");
   screen_area_puts(ge->help, str);
 
   /* Paint the in the feedback area */
