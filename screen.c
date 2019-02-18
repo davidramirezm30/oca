@@ -1,3 +1,12 @@
+/** 
+ * @brief It defines a screen
+ * 
+ * @file screen.h
+ * @author David Ramirez
+ * @version 1.1
+ * @date 18/02/2019
+ */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,9 +25,16 @@
 
 #define ACCESS(d, x, y) (d + ((y) * COLUMNS) + (x))
 
+/** 
+ * @brief The structure of the screen
+ *
+ * It stores information of the area, 
+ * such as the postion x, y; the width
+ * and the height. It also stores the cursor 
+ */
 struct _Area{
-  int x, y, width, height;
-  char *cursor;
+  int x, y, width, height; /*!< Position x, y and width and height of the area */
+  char *cursor; /*!< Cursor in the area */
 };
 
 char *__data;

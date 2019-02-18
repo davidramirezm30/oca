@@ -18,8 +18,7 @@
 
 typedef struct _Game{
   Player* player;
-  Id object_location;
-  /*Object* object[MAX_OBJECTS + 1];*/
+  Object* object;
   Space* spaces[MAX_SPACES + 1];
   T_Command last_cmd;
 } Game;

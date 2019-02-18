@@ -13,7 +13,7 @@
 #include <string.h>
 #include "game.h"
 
-#define N_CALLBACK 4
+#define N_CALLBACK 6
 
 /**
    Define the function type for the callbacks
@@ -27,12 +27,16 @@ void game_callback_unknown(Game* game);
 void game_callback_exit(Game* game);
 void game_callback_next(Game* game);
 void game_callback_back(Game* game);
+void game_callback_take(Game* game);
+void game_callback_drop(Game* game);
 
 static callback_fn game_callback_fn_list[N_CALLBACK]={
   game_callback_unknown,
   game_callback_exit,
   game_callback_next,
-  game_callback_back};
+  game_callback_back,
+  game_callback_take,
+  game_callback_drop};
 
 /**
    Private functions
@@ -58,7 +62,7 @@ STATUS game_create(Game* game) {
   }
   
   game->player = NULL;
-  game->object_location = NO_ID;
+  game->object = NULL;
   game->last_cmd = NO_CMD;
   
   return OK;
@@ -134,18 +138,38 @@ STATUS game_set_object_location(Game* game, Id id) {
   if (id == NO_ID) {
     return ERROR;
   }
-
-  game->object_location = id;
-
+  
   return OK;
 }
 
 Id game_get_player_location(Game* game) {
-  return (Id)game->player;
+  return player_get_location(game->player);
 }
 
 Id game_get_object_location(Game* game) {
-  return game->object_location;
+  int i = 0;
+  Id space_id = NO_ID;
+  Id possible_object = NO_ID;
+
+  /*************************************************************/
+  if(player_get_ported_object(game->player)){
+  	return player_get_location(game->player);
+  }
+  for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
+    space_id = space_get_id(game->spaces[i]);
+	fprintf(stdout, "--> Space (Id: %ld)\n", space_id);
+	possible_object = space_get_object(game->spaces[i]);
+	fprintf(stdout, "--> Object (Id: %ld)\n", possible_object);
+    if (space_id == possible_object) {
+      /*space_id = space_get_south(game->spaces[i]);
+      if (space_id != NO_ID) {
+        game_set_player_location(game, space_id);
+      }*/
+      return space_get_id(game->spaces[i]);
+    }
+  }/***************************************************************/
+	
+  return NO_ID;
 }
 
 STATUS game_update(Game* game, T_Command cmd) {
@@ -158,6 +182,16 @@ T_Command game_get_last_command(Game* game){
   return game->last_cmd;
 }
 
+/**
+* @brief Prints the information we want to know
+*
+* game_print_data prints the location of the object and the player
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game
+*/
 void game_print_data(Game* game) {
   int i = 0;
   
@@ -168,11 +202,22 @@ void game_print_data(Game* game) {
     space_print(game->spaces[i]);
   }
   
-  printf("=> Object location: %d\n", (int) game->object_location);    
+  printf("=> Object location: %ld\n", (Id) game->object);    
   printf("=> Player location: %ld\n", (Id) game->player);
   printf("prompt:> ");
 }
 
+/**
+* @brief when the game ends
+*
+* game_is_over used when the game ends
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game
+* @return FALSE
+*/
 BOOL game_is_over(Game* game) {
   return FALSE;
 }
@@ -181,12 +226,45 @@ BOOL game_is_over(Game* game) {
    Callbacks implementation for each action 
 */
 
+/**
+* @brief when there is and unknown command, it does not do anything
+*
+* game_callback_unknown used if something unknown is written with the keyboard
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game
+* @return it doesn't return anything because it's type void
+*/
 void game_callback_unknown(Game* game) {
 }
 
+/**
+* @brief when write e with the keyboard, exit the game
+*
+* game_callback_exit used to go exit the game
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game
+* @return it doesn't return anything because it's type void
+*/
 void game_callback_exit(Game* game) {
 }
 
+/**
+* @brief when write n with the keyboard, go to the next space in the game
+*
+* game_callback_next used to go to the next space
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game
+* @return it doesn't return anything because it's type void
+*/
 void game_callback_next(Game* game) {
   int i = 0;
   Id current_id = NO_ID;
@@ -209,6 +287,17 @@ void game_callback_next(Game* game) {
   }
 }
 
+/**
+* @brief when write b with the keyboard, go a space back in the game
+*
+* game_callback_back used to go to the back space
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game
+* @return it doesn't return anything because it's type void
+*/
 void game_callback_back(Game* game) {
   int i = 0;
   Id current_id = NO_ID;
@@ -232,3 +321,77 @@ void game_callback_back(Game* game) {
   }
 }
 
+/**
+* @brief when write t with the keyboard, take the object
+*
+* game_callback_take takes the object
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game where we want to take an object
+* @return it doesn't return anything because it's type void
+*/
+void game_callback_take(Game* game) {
+  int i = 0;
+  Id current_id = NO_ID;
+  Id space_id = NO_ID;  
+  /*Id object = NO_ID;*/
+  Id player_id = NO_ID;
+  
+  player_id = game_get_player_location(game);
+  if (NO_ID == player_id) {
+    return;
+  }
+  /*object = space_get_object(game->player);*/
+  space_id = game_get_object_location(game);
+  
+  if (NO_ID == space_id) {
+    return;
+  }
+  
+  for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
+    current_id = space_get_id(game->spaces[i]);
+    if (current_id == space_id) {
+      current_id = space_get_north(game->spaces[i]);
+      if (current_id != NO_ID) {
+        game_set_player_location(game, current_id);
+      }
+      return;
+    }
+  }
+}
+
+/**
+* @brief when write d with the keyboard, drops the object
+*
+* game_callback_drop drops the object
+*
+* @date 12/02/2019
+* @author David Ramirez
+*
+* @param game is the game where we want to drop an object
+* @return it doesn't return anything because it's type void
+*/
+void game_callback_drop(Game* game) {
+  int i = 0;
+  Id current_id = NO_ID;
+  Id space_id = NO_ID;
+  
+  space_id = game_get_object_location(game);
+  
+  if (NO_ID == space_id) {
+    return;
+  }
+  
+  for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
+    current_id = space_get_id(game->spaces[i]);
+    if (current_id == space_id) {
+      current_id = space_get_north(game->spaces[i]);
+      if (current_id != NO_ID) {
+        game_set_object_location(game, current_id);
+      }
+      return;
+    }
+  }
+}

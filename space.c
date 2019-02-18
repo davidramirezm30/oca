@@ -11,7 +11,7 @@ struct _Space {
   Id south;
   Id east;
   Id west;
-  BOOL object;
+  Id object;
 };
 
 Space* space_create(Id id) {
@@ -35,7 +35,7 @@ Space* space_create(Id id) {
   newSpace->east = NO_ID;
   newSpace->west = NO_ID;
 
-  newSpace->object = FALSE;
+  newSpace->object = NO_ID;
 
   return newSpace;
 }
@@ -95,11 +95,11 @@ STATUS space_set_west(Space* space, Id id) {
   return OK;
 }
 
-STATUS space_set_object(Space* space, BOOL value) {
+STATUS space_set_object(Space* space, Id object) {
   if (!space) {
     return ERROR;
   }
-  space->object = value;
+  space->object = object;
   return OK;
 }
 
@@ -145,9 +145,9 @@ Id space_get_west(Space* space) {
   return space->west;
 }
 
-BOOL space_get_object(Space* space) {
+Id space_get_object(Space* space) {
   if (!space) {
-    return FALSE;
+    return NO_ID;
   }
   return space->object;
 }
