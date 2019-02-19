@@ -4,7 +4,7 @@
  * @file player.h
  * @author David Ramirez
  * @version 1.0 
- * @date 08/02/2019
+ * @date 18/02/2019
  */
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -13,15 +13,17 @@
 
 typedef struct _Player Player;
 
-Player* player_create(Id id);
-STATUS player_destroy(Player* player);
-STATUS player_set_name(Player* player, char* name);
-STATUS player_set_location(Player* player, Id location);
-STATUS player_set_ported_object(Player* player, Id ported_object);
-Id player_get_id(Player* player);
-const char * player_get_name(Player* player);
-Id player_get_location(Player* player);
-Id player_get_ported_object(Player* player);
-STATUS player_print(Player* player);
+Player *player_create(Id id);
+STATUS player_destroy(Player *player);
+STATUS player_set_name(Player *player, char *name);
+STATUS player_set_location(Player *player, Id location);
+Id player_get_id(Player *player);
+const char *player_get_name(Player *player);
+Id player_get_location(Player *player);
+BOOL player_object(Player *player);
+STATUS player_print(Player *player);
+
+STATUS player_take_object(Player *player, Id id);
+STATUS player_drop_object(Player *player);
 
 #endif

@@ -10,14 +10,16 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-typedef enum enum_Command {
-  NO_CMD = -1, 
-  UNKNOWN, 
-  EXIT, 
-  NEXT, 
+typedef enum enum_Command
+{
+  NO_CMD = -1,
+  UNKNOWN,
+  EXIT,
+  NEXT,
   BACK,
   TAKE,
-  DROP} T_Command;
+  DROP
+} T_Command;
 
 T_Command get_user_input();
 

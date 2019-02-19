@@ -16,16 +16,24 @@
 
 typedef long Id;
 
-typedef enum {
-  FALSE, TRUE
+typedef enum
+{
+  FALSE,
+  TRUE
 } BOOL;
 
-typedef enum {
-  ERROR, OK
+typedef enum
+{
+  ERROR,
+  OK
 } STATUS;
 
-typedef enum {
-  N, S, E, W
+typedef enum
+{
+  N,
+  S,
+  E,
+  W
 } DIRECTION;
 
 #endif
